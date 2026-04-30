@@ -1,52 +1,52 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 60" fill="none">
   <!-- Bicycle wheel (left) -->
-  <circle cx="35" cy="35" r="16" stroke="#1B4965" stroke-width="2.5" fill="none"/>
-  <circle cx="35" cy="35" r="2" fill="#1B4965"/>
+  <circle cx="35" cy="35" r="16" stroke="#FFFFFF" stroke-width="2.5" fill="none"/>
+  <circle cx="35" cy="35" r="2" fill="#FFFFFF"/>
   <!-- Spokes left -->
-  <line x1="35" y1="19" x2="35" y2="51" stroke="#1B4965" stroke-width="0.8"/>
-  <line x1="19" y1="35" x2="51" y2="35" stroke="#1B4965" stroke-width="0.8"/>
-  <line x1="23.7" y1="23.7" x2="46.3" y2="46.3" stroke="#1B4965" stroke-width="0.8"/>
-  <line x1="46.3" y1="23.7" x2="23.7" y2="46.3" stroke="#1B4965" stroke-width="0.8"/>
+  <line x1="35" y1="19" x2="35" y2="51" stroke="#FFFFFF" stroke-width="0.8"/>
+  <line x1="19" y1="35" x2="51" y2="35" stroke="#FFFFFF" stroke-width="0.8"/>
+  <line x1="23.7" y1="23.7" x2="46.3" y2="46.3" stroke="#FFFFFF" stroke-width="0.8"/>
+  <line x1="46.3" y1="23.7" x2="23.7" y2="46.3" stroke="#FFFFFF" stroke-width="0.8"/>
   
   <!-- Bicycle wheel (right) -->
-  <circle cx="85" cy="35" r="16" stroke="#1B4965" stroke-width="2.5" fill="none"/>
-  <circle cx="85" cy="35" r="2" fill="#1B4965"/>
+  <circle cx="85" cy="35" r="16" stroke="#FFFFFF" stroke-width="2.5" fill="none"/>
+  <circle cx="85" cy="35" r="2" fill="#FFFFFF"/>
   <!-- Spokes right -->
-  <line x1="85" y1="19" x2="85" y2="51" stroke="#1B4965" stroke-width="0.8"/>
-  <line x1="69" y1="35" x2="101" y2="35" stroke="#1B4965" stroke-width="0.8"/>
-  <line x1="73.7" y1="23.7" x2="96.3" y2="46.3" stroke="#1B4965" stroke-width="0.8"/>
-  <line x1="96.3" y1="23.7" x2="73.7" y2="46.3" stroke="#1B4965" stroke-width="0.8"/>
+  <line x1="85" y1="19" x2="85" y2="51" stroke="#FFFFFF" stroke-width="0.8"/>
+  <line x1="69" y1="35" x2="101" y2="35" stroke="#FFFFFF" stroke-width="0.8"/>
+  <line x1="73.7" y1="23.7" x2="96.3" y2="46.3" stroke="#FFFFFF" stroke-width="0.8"/>
+  <line x1="96.3" y1="23.7" x2="73.7" y2="46.3" stroke="#FFFFFF" stroke-width="0.8"/>
   
   <!-- Bicycle frame -->
-  <polyline points="35,35 55,18 85,35" stroke="#E76F51" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
-  <line x1="55" y1="18" x2="55" y2="35" stroke="#E76F51" stroke-width="2.5"/>
-  <line x1="55" y1="35" x2="35" y2="35" stroke="#E76F51" stroke-width="2.5"/>
+  <polyline points="35,35 55,18 85,35" stroke="#F2A900" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+  <line x1="55" y1="18" x2="55" y2="35" stroke="#F2A900" stroke-width="2.5"/>
+  <line x1="55" y1="35" x2="35" y2="35" stroke="#F2A900" stroke-width="2.5"/>
   <!-- Handlebars -->
-  <line x1="55" y1="18" x2="48" y2="12" stroke="#1B4965" stroke-width="2.5" stroke-linecap="round"/>
-  <line x1="48" y1="12" x2="52" y2="10" stroke="#1B4965" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="55" y1="18" x2="48" y2="12" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="48" y1="12" x2="52" y2="10" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
   <!-- Seat -->
-  <line x1="55" y1="18" x2="58" y2="13" stroke="#1B4965" stroke-width="2.5" stroke-linecap="round"/>
-  <ellipse cx="58" cy="12" rx="4" ry="1.5" fill="#1B4965"/>
+  <line x1="55" y1="18" x2="58" y2="13" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="58" cy="12" rx="4" ry="1.5" fill="#FFFFFF"/>
   <!-- Pedal area -->
-  <line x1="55" y1="35" x2="50" y2="37" stroke="#1B4965" stroke-width="2" stroke-linecap="round"/>
+  <line x1="55" y1="35" x2="50" y2="37" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
   
   <!-- Cathedral silhouette (simplified) -->
-  <path d="M92,8 L92,35 L94,35 L94,12 L97,12 L97,35 L100,35 L100,15 L104,6 L108,15 L108,35 L111,35 L111,12 L114,12 L114,35 L116,35 L116,8 Z" fill="#F2A900" opacity="0.85"/>
+  <path d="M92,8 L92,35 L94,35 L94,12 L97,12 L97,35 L100,35 L100,15 L104,6 L108,15 L108,35 L111,35 L111,12 L114,12 L114,35 L116,35 L116,8 Z" fill="#F2A900" opacity="0.9"/>
   <!-- Cathedral cross -->
   <line x1="104" y1="3" x2="104" y2="7" stroke="#F2A900" stroke-width="1.5"/>
   <line x1="102" y1="4.5" x2="106" y2="4.5" stroke="#F2A900" stroke-width="1.5"/>
   
   <!-- Volcano Mombacho silhouette -->
-  <path d="M118,35 L125,18 L130,25 L138,10 L145,22 L150,35 Z" fill="#2D6A4F" opacity="0.7"/>
+  <path d="M118,35 L125,18 L130,25 L138,10 L145,22 L150,35 Z" fill="#2D6A4F" opacity="0.8"/>
   
   <!-- Text: Bici -->
-  <text x="155" y="30" font-family="Arial, sans-serif" font-size="22" font-weight="800" fill="#1B4965" letter-spacing="-0.5">Bici</text>
+  <text x="155" y="30" font-family="Arial, sans-serif" font-size="22" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">Bici</text>
   <!-- Text: Ventura -->
-  <text x="155" y="46" font-family="Arial, sans-serif" font-size="14" font-weight="600" fill="#E76F51" letter-spacing="1.5">VENTURA</text>
+  <text x="155" y="46" font-family="Arial, sans-serif" font-size="14" font-weight="600" fill="#F2A900" letter-spacing="1.5">VENTURA</text>
   
   <!-- Decorative line -->
   <line x1="155" y1="33" x2="230" y2="33" stroke="#F2A900" stroke-width="2" stroke-linecap="round"/>
   
   <!-- Tagline -->
-  <text x="232" y="44" font-family="Georgia, serif" font-size="7" fill="#2D6A4F" font-style="italic" letter-spacing="0.3">Granada, Nica</text>
+  <text x="232" y="44" font-family="Georgia, serif" font-size="7" fill="#F2A900" font-style="italic" letter-spacing="0.3" opacity="0.8">Granada, Nica</text>
 </svg>
