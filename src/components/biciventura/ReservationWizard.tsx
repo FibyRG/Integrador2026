@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
-import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -28,6 +27,16 @@ import {
   Minus,
   Trash2,
   ShoppingBag,
+  HardHat,
+  Lock,
+  Baby,
+  UtensilsCrossed,
+  Droplets,
+  Flashlight,
+  Calendar as CalendarIcon,
+  Lightbulb,
+  PartyPopper,
+  type LucideIcon,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -43,7 +52,7 @@ interface AccessoryItem {
   id: string;
   name: string;
   price: number;
-  emoji: string;
+  icon: LucideIcon;
   qty: number;
 }
 
@@ -110,13 +119,13 @@ export default function ReservationWizard({
     notes: "",
   });
 
-  const allAccessories: { id: string; name: string; price: number; emoji: string }[] = [
-    { id: "casco", name: "Casco de seguridad", price: 2, emoji: "🪖" },
-    { id: "candado", name: "Candado U-Lock", price: 1, emoji: "🔒" },
-    { id: "silla", name: "Silla para niños", price: 5, emoji: "🧒" },
-    { id: "picnic", name: "Kit de picnic", price: 8, emoji: "🧺" },
-    { id: "botella", name: "Botella de agua", price: 1, emoji: "💧" },
-    { id: "farol", name: "Farol extra", price: 1, emoji: "🔦" },
+  const allAccessories: { id: string; name: string; price: number; icon: LucideIcon }[] = [
+    { id: "casco", name: "Casco de seguridad", price: 2, icon: HardHat },
+    { id: "candado", name: "Candado U-Lock", price: 1, icon: Lock },
+    { id: "silla", name: "Silla para niños", price: 5, icon: Baby },
+    { id: "picnic", name: "Kit de picnic", price: 8, icon: UtensilsCrossed },
+    { id: "botella", name: "Botella de agua", price: 1, icon: Droplets },
+    { id: "farol", name: "Farol extra", price: 1, icon: Flashlight },
   ];
 
   const addAccessory = (acc: (typeof allAccessories)[0]) => {
@@ -180,9 +189,12 @@ export default function ReservationWizard({
           >
             <Check className="w-10 h-10 text-jungle-green" />
           </motion.div>
-          <h2 className="text-3xl font-extrabold text-anil-blue mb-4">
-            ¡Reserva recibida! 🎉
-          </h2>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <PartyPopper className="w-6 h-6 text-colonial-yellow" />
+            <h2 className="text-3xl font-extrabold text-anil-blue">
+              Reserva recibida
+            </h2>
+          </div>
           <p className="text-muted-foreground mb-2">
             Gracias, <span className="font-semibold text-anil-blue">{formData.name}</span>! Hemos recibido tu solicitud de reserva.
           </p>
@@ -482,6 +494,7 @@ export default function ReservationWizard({
                 </h4>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-6">
                   {allAccessories.map((acc) => {
+                    const AccIcon = acc.icon;
                     const inCart = accessories.find((a) => a.id === acc.id);
                     return (
                       <button
@@ -495,7 +508,9 @@ export default function ReservationWizard({
                             : "bg-warm-white border-2 border-transparent hover:border-anil-blue/10"
                         }`}
                       >
-                        <span className="text-lg">{acc.emoji}</span>
+                        <div className="w-8 h-8 bg-colonial-yellow/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <AccIcon className="w-4 h-4 text-colonial-yellow" />
+                        </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-medium text-anil-blue truncate">
                             {acc.name}
@@ -547,8 +562,9 @@ export default function ReservationWizard({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
                   {/* Pickup */}
                   <div>
-                    <Label className="text-sm font-semibold text-anil-blue mb-2 block">
-                      📅 Fecha de recogida
+                    <Label className="text-sm font-semibold text-anil-blue mb-2 flex items-center gap-2">
+                      <CalendarIcon className="w-4 h-4 text-colonial-yellow" />
+                      Fecha de recogida
                     </Label>
                     <Calendar
                       mode="single"
@@ -579,8 +595,9 @@ export default function ReservationWizard({
 
                   {/* Return */}
                   <div>
-                    <Label className="text-sm font-semibold text-anil-blue mb-2 block">
-                      📅 Fecha de devolución
+                    <Label className="text-sm font-semibold text-anil-blue mb-2 flex items-center gap-2">
+                      <CalendarIcon className="w-4 h-4 text-colonial-yellow" />
+                      Fecha de devolución
                     </Label>
                     <Calendar
                       mode="single"
@@ -773,8 +790,9 @@ export default function ReservationWizard({
                         ${total}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      💡 Pago en persona al momento de la recogida
+                    <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1.5">
+                      <Lightbulb className="w-3.5 h-3.5" />
+                      Pago en persona al momento de la recogida
                     </p>
                   </div>
                 </div>

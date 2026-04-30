@@ -5,7 +5,7 @@ import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Clock, Star, ChevronLeft, ChevronRight, HardHat, Lock, Baby, UtensilsCrossed, Droplets, Flashlight, type LucideIcon } from "lucide-react";
 
 interface Bike {
   id: string;
@@ -70,13 +70,20 @@ const bikes: Bike[] = [
   },
 ];
 
-const accessories = [
-  { id: "casco", name: "Casco de seguridad", price: 2, icon: "🪖" },
-  { id: "candado", name: "Candado U-Lock", price: 1, icon: "🔒" },
-  { id: "silla", name: "Silla para niños", price: 5, icon: "🧒" },
-  { id: "picnic", name: "Kit de picnic", price: 8, icon: "🧺" },
-  { id: "botella", name: "Botella de agua", price: 1, icon: "💧" },
-  { id: "farol", name: "Farol extra", price: 1, icon: "🔦" },
+interface Accessory {
+  id: string;
+  name: string;
+  price: number;
+  icon: LucideIcon;
+}
+
+const accessories: Accessory[] = [
+  { id: "casco", name: "Casco de seguridad", price: 2, icon: HardHat },
+  { id: "candado", name: "Candado U-Lock", price: 1, icon: Lock },
+  { id: "silla", name: "Silla para niños", price: 5, icon: Baby },
+  { id: "picnic", name: "Kit de picnic", price: 8, icon: UtensilsCrossed },
+  { id: "botella", name: "Botella de agua", price: 1, icon: Droplets },
+  { id: "farol", name: "Farol extra", price: 1, icon: Flashlight },
 ];
 
 const typeFilters = [
@@ -277,20 +284,25 @@ export default function BikeCatalog({ onReserve }: { onReserve: (bike?: Bike) =>
               className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
-              {accessories.map((acc) => (
-                <div
-                  key={acc.id}
-                  className="flex-shrink-0 w-44 bg-white rounded-2xl p-4 border border-anil-blue/5 hover:border-colonial-yellow/30 hover:shadow-md transition-all duration-200 snap-start text-center"
-                >
-                  <span className="text-3xl mb-2 block">{acc.icon}</span>
-                  <h4 className="text-sm font-semibold text-anil-blue mb-1">
-                    {acc.name}
-                  </h4>
-                  <span className="text-coral font-bold">
-                    +${acc.price}/día
-                  </span>
-                </div>
-              ))}
+              {accessories.map((acc) => {
+                const AccIcon = acc.icon;
+                return (
+                  <div
+                    key={acc.id}
+                    className="flex-shrink-0 w-44 bg-white rounded-2xl p-4 border border-anil-blue/5 hover:border-colonial-yellow/30 hover:shadow-md transition-all duration-200 snap-start text-center"
+                  >
+                    <div className="w-10 h-10 bg-colonial-yellow/10 rounded-xl flex items-center justify-center mx-auto mb-2">
+                      <AccIcon className="w-5 h-5 text-colonial-yellow" />
+                    </div>
+                    <h4 className="text-sm font-semibold text-anil-blue mb-1">
+                      {acc.name}
+                    </h4>
+                    <span className="text-coral font-bold">
+                      +${acc.price}/día
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

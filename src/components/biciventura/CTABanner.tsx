@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Bike } from "lucide-react";
 
 export default function CTABanner() {
   const ref = useRef<HTMLDivElement>(null);
@@ -36,7 +37,9 @@ export default function CTABanner() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <span className="inline-block text-5xl mb-6">🚴</span>
+          <div className="w-16 h-16 bg-colonial-yellow/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Bike className="w-8 h-8 text-colonial-yellow" />
+          </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight">
             ¿Listo para <span className="text-colonial-yellow">rodar</span>?
           </h2>

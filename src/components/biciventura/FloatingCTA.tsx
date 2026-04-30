@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bike } from "lucide-react";
+import { Bike, Home, Camera, Phone } from "lucide-react";
 
 export default function FloatingCTA() {
   const [visible, setVisible] = useState(false);
@@ -49,14 +49,14 @@ export default function FloatingCTA() {
                 onClick={() => scrollTo("#inicio")}
                 className="flex flex-col items-center gap-0.5 px-3 py-1.5 text-muted-foreground hover:text-anil-blue transition-colors"
               >
-                <span className="text-lg">🏠</span>
+                <Home className="w-5 h-5" />
                 <span className="text-[10px] font-medium">Inicio</span>
               </button>
               <button
                 onClick={() => scrollTo("#bicicletas")}
                 className="flex flex-col items-center gap-0.5 px-3 py-1.5 text-muted-foreground hover:text-anil-blue transition-colors"
               >
-                <span className="text-lg">🚲</span>
+                <Bike className="w-5 h-5" />
                 <span className="text-[10px] font-medium">Bicis</span>
               </button>
               <button
@@ -69,14 +69,14 @@ export default function FloatingCTA() {
                 onClick={() => scrollTo("#galeria")}
                 className="flex flex-col items-center gap-0.5 px-3 py-1.5 text-muted-foreground hover:text-anil-blue transition-colors"
               >
-                <span className="text-lg">📸</span>
+                <Camera className="w-5 h-5" />
                 <span className="text-[10px] font-medium">Galería</span>
               </button>
               <button
                 onClick={() => scrollTo("#contacto")}
                 className="flex flex-col items-center gap-0.5 px-3 py-1.5 text-muted-foreground hover:text-anil-blue transition-colors"
               >
-                <span className="text-lg">📞</span>
+                <Phone className="w-5 h-5" />
                 <span className="text-[10px] font-medium">Contacto</span>
               </button>
             </div>

@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Bike } from "lucide-react";
 
 export default function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -55,8 +55,9 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <span className="inline-block px-4 py-2 bg-colonial-yellow/20 backdrop-blur-sm rounded-full text-colonial-yellow text-sm font-medium mb-6 border border-colonial-yellow/30">
-            🚴 Granada, Nicaragua
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-colonial-yellow/20 backdrop-blur-sm rounded-full text-colonial-yellow text-sm font-medium mb-6 border border-colonial-yellow/30">
+            <Bike className="w-4 h-4" />
+            Granada, Nicaragua
           </span>
         </motion.div>
 

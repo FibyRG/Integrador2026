@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Bike, Navigation, Truck, MapPin, Phone, Mail, Instagram, Facebook } from "lucide-react";
+import { Bike, Navigation, Truck, MapPin, Phone, Mail, Instagram, Facebook, Heart } from "lucide-react";
 import Image from "next/image";
 
 const quickLinks = [
@@ -144,8 +144,8 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} BiciVentura. Todos los derechos
             reservados.
           </p>
-          <p className="text-warm-white/50 text-xs">
-            Hecho con ❤️ en Granada, Nicaragua
+          <p className="text-warm-white/50 text-xs inline-flex items-center gap-1">
+            Hecho con <Heart className="w-3 h-3 text-coral fill-coral" /> en Granada, Nicaragua
           </p>
         </div>
       </div>
