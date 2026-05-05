@@ -548,6 +548,7 @@ export default function AdminPanel({
   return (
     <AnimatePresence>
       <motion.div
+        key="admin-backdrop"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -556,6 +557,7 @@ export default function AdminPanel({
       />
 
       <motion.div
+        key="admin-panel"
         initial={{ opacity: 0, x: "100%" }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: "100%" }}
