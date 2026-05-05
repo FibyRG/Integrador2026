@@ -2,9 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bike, Home, Camera, Phone } from "lucide-react";
+import { Bike, Home, Camera, Phone, Settings } from "lucide-react";
 
-export default function FloatingCTA() {
+interface FloatingCTAProps {
+  onOpenAdmin?: () => void;
+}
+
+export default function FloatingCTA({ onOpenAdmin }: FloatingCTAProps) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -24,7 +28,22 @@ export default function FloatingCTA() {
     <AnimatePresence>
       {visible && (
         <>
-          {/* Desktop floating button */}
+          {/* Admin button - bottom left (desktop) */}
+          {onOpenAdmin && (
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 20 }}
+              onClick={onOpenAdmin}
+              className="hidden md:flex fixed bottom-6 left-6 z-40 items-center gap-2 px-4 py-2.5 bg-anil-blue/80 hover:bg-anil-blue text-white/80 hover:text-white rounded-2xl shadow-lg shadow-anil-blue/20 hover:shadow-anil-blue/40 backdrop-blur-sm transition-all duration-300 hover:scale-105 text-sm font-medium"
+              aria-label="Abrir panel de administración"
+            >
+              <Settings className="w-4 h-4" />
+              <span>Admin</span>
+            </motion.button>
+          )}
+
+          {/* Desktop floating button - bottom right */}
           <motion.button
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -79,6 +98,16 @@ export default function FloatingCTA() {
                 <Phone className="w-5 h-5" />
                 <span className="text-[10px] font-medium">Contacto</span>
               </button>
+              {onOpenAdmin && (
+                <button
+                  onClick={onOpenAdmin}
+                  className="flex flex-col items-center gap-0.5 px-3 py-1.5 text-muted-foreground hover:text-anil-blue transition-colors"
+                  aria-label="Admin"
+                >
+                  <Settings className="w-5 h-5" />
+                  <span className="text-[10px] font-medium">Admin</span>
+                </button>
+              )}
             </div>
           </motion.div>
         </>

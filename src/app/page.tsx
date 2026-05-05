@@ -71,7 +71,7 @@ export default function Home() {
         <ContactSection />
       </main>
       <Footer onOpenAdmin={() => setAdminOpen(true)} />
-      <FloatingCTA />
+      <FloatingCTA onOpenAdmin={() => setAdminOpen(true)} />
       <AdminPanel open={adminOpen} onClose={() => setAdminOpen(false)} />
     </div>
   );
