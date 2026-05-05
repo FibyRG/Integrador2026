@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Navbar from "@/components/biciventura/Navbar";
 import Footer from "@/components/biciventura/Footer";
@@ -13,9 +13,13 @@ import CTABanner from "@/components/biciventura/CTABanner";
 import ContactSection from "@/components/biciventura/ContactSection";
 import FloatingCTA from "@/components/biciventura/FloatingCTA";
 
-// Dynamic import for ReservationWizard to avoid SSR issues with Calendar
+// Dynamic imports to avoid SSR issues
 const ReservationWizard = dynamic(
   () => import("@/components/biciventura/ReservationWizard"),
+  { ssr: false }
+);
+const AdminPanel = dynamic(
+  () => import("@/components/admin/AdminPanel"),
   { ssr: false }
 );
 
@@ -28,6 +32,22 @@ interface PreselectedBike {
 
 export default function Home() {
   const [preselectedBike, setPreselectedBike] = useState<PreselectedBike | undefined>();
+  const [adminOpen, setAdminOpen] = useState(false);
+
+  // Keyboard shortcut: Ctrl+Shift+A to open admin
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key === "A") {
+        e.preventDefault();
+        setAdminOpen((prev) => !prev);
+      }
+      if (e.key === "Escape" && adminOpen) {
+        setAdminOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [adminOpen]);
 
   const handleReserve = (bike?: PreselectedBike) => {
     if (bike) {
@@ -50,8 +70,9 @@ export default function Home() {
         <ReservationWizard preselectedBike={preselectedBike} />
         <ContactSection />
       </main>
-      <Footer />
+      <Footer onOpenAdmin={() => setAdminOpen(true)} />
       <FloatingCTA />
+      <AdminPanel open={adminOpen} onClose={() => setAdminOpen(false)} />
     </div>
   );
 }

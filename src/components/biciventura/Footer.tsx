@@ -1,8 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Bike, Navigation, Truck, MapPin, Phone, Mail, Instagram, Facebook, Heart } from "lucide-react";
+import { Bike, Navigation, Truck, MapPin, Phone, Mail, Instagram, Facebook, Heart, Shield } from "lucide-react";
 import Image from "next/image";
+
+interface FooterProps {
+  onOpenAdmin?: () => void;
+}
 
 const quickLinks = [
   { label: "Inicio", href: "#inicio" },
@@ -17,7 +21,7 @@ const scrollTo = (href: string) => {
   if (el) el.scrollIntoView({ behavior: "smooth" });
 };
 
-export default function Footer() {
+export default function Footer({ onOpenAdmin }: FooterProps) {
   return (
     <footer className="bg-anil-blue text-warm-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
@@ -140,10 +144,24 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-warm-white/50 text-xs">
-            &copy; {new Date().getFullYear()} BiciVentura. Todos los derechos
-            reservados.
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="text-warm-white/50 text-xs">
+              &copy; {new Date().getFullYear()} BiciVentura. Todos los derechos
+              reservados.
+            </p>
+            {onOpenAdmin && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenAdmin();
+                }}
+                className="text-warm-white/30 hover:text-warm-white/60 transition-colors"
+                aria-label="Admin"
+              >
+                <Shield className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
           <p className="text-warm-white/50 text-xs inline-flex items-center gap-1">
             Hecho con <Heart className="w-3 h-3 text-coral fill-coral" /> en Granada, Nicaragua
           </p>
