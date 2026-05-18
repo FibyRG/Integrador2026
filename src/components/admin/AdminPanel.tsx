@@ -13,6 +13,7 @@ import {
   ChevronLeft,
   Bike,
   Loader2,
+  Instagram,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +24,7 @@ import POSView from "./POSView";
 import InvoiceView from "./InvoiceView";
 import TicketView from "./TicketView";
 import InventoryView from "./InventoryView";
+import PublicacionesView from "./PublicacionesView";
 
 // ── Sidebar nav items ────────────────────────────────────────────────
 interface NavItem {
@@ -38,6 +40,7 @@ const navItems: NavItem[] = [
   { id: "tickets", label: "Tickets", icon: TicketIcon, adminOnly: false },
   { id: "invoices", label: "Facturación", icon: FileText, adminOnly: true },
   { id: "inventory", label: "Inventario", icon: Wrench, adminOnly: true },
+  { id: "publicaciones", label: "Publicaciones", icon: Instagram, adminOnly: true },
 ];
 
 // ── Main Admin Panel ─────────────────────────────────────────────────
@@ -84,6 +87,8 @@ export default function AdminPanel({
         return <TicketView />;
       case "inventory":
         return <InventoryView />;
+      case "publicaciones":
+        return <PublicacionesView />;
       default:
         return <DashboardView />;
     }
