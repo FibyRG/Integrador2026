@@ -84,18 +84,18 @@ const CATEGORY_LABELS: Record<string, string> = {
 // ── Animation variants ─────────────────────────────────────────────
 const cartItemVariants = {
   initial: { opacity: 0, x: 20, height: 0, marginBottom: 0 },
-  animate: { opacity: 1, x: 0, height: "auto", marginBottom: 8, transition: { type: "spring", damping: 25, stiffness: 300 } },
+  animate: { opacity: 1, x: 0, height: "auto", marginBottom: 8, transition: { type: "spring" as const, damping: 25, stiffness: 300 } },
   exit: { opacity: 0, x: -20, height: 0, marginBottom: 0, transition: { duration: 0.2 } },
 };
 
 const productCardVariants = {
   initial: { opacity: 0, scale: 0.95 },
-  animate: { opacity: 1, scale: 1, transition: { type: "spring", damping: 25, stiffness: 300 } },
+  animate: { opacity: 1, scale: 1, transition: { type: "spring" as const, damping: 25, stiffness: 300 } },
 };
 
 const successOverlayVariants = {
   initial: { opacity: 0, scale: 0.8 },
-  animate: { opacity: 1, scale: 1, transition: { type: "spring", damping: 20, stiffness: 300 } },
+  animate: { opacity: 1, scale: 1, transition: { type: "spring" as const, damping: 20, stiffness: 300 } },
   exit: { opacity: 0, scale: 0.9, transition: { duration: 0.3 } },
 };
 
