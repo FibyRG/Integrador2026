@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -10,9 +10,9 @@ import {
   Ticket as TicketIcon,
   Wrench,
   LogOut,
-  Menu,
   ChevronLeft,
   Bike,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -155,7 +155,7 @@ export default function AdminPanel({
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                         isActive
                           ? "bg-white/15 text-colonial-yellow"
-                          : "text-white/60 hover:text-white hover:bg-white/8"
+                          : "text-white/60 hover:text-white hover:bg-white/10"
                       }`}
                       title={sidebarCollapsed ? item.label : undefined}
                     >
@@ -170,7 +170,7 @@ export default function AdminPanel({
               <div className="px-2 py-2 border-t border-white/10">
                 <button
                   onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                  className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-white/40 hover:text-white/70 hover:bg-white/8 transition-colors text-xs"
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-white/40 hover:text-white/70 hover:bg-white/10 transition-colors text-xs"
                 >
                   <ChevronLeft
                     className={`w-4 h-4 transition-transform duration-200 ${
@@ -206,7 +206,7 @@ export default function AdminPanel({
                 </div>
                 <button
                   onClick={onClose}
-                  className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-white/40 hover:text-coral hover:bg-coral/10 transition-colors text-xs"
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-white/40 hover:text-coral hover:bg-coral/10 transition-colors text-xs cursor-pointer"
                 >
                   <LogOut className="w-4 h-4 flex-shrink-0" />
                   {!sidebarCollapsed && <span>Cerrar</span>}
@@ -246,7 +246,7 @@ export default function AdminPanel({
                       }`}
                       title={item.label}
                     >
-                      <Icon className="w-4.5 h-4.5" />
+                      <Icon className="w-[18px] h-[18px]" />
                     </button>
                   );
                 })}
@@ -285,17 +285,41 @@ export default function AdminPanel({
 
             {/* ── Main content ──────────────────────────────────── */}
             <main className="flex-1 overflow-y-auto p-4 sm:p-6">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeView}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {renderView()}
-                </motion.div>
-              </AnimatePresence>
+              <Suspense
+                fallback={
+                  <div className="flex items-center justify-center min-h-[400px]">
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex flex-col items-center gap-4"
+                    >
+                      <div className="relative">
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                          className="w-12 h-12 rounded-full border-[3px] border-anil-blue/20 border-t-colonial-yellow"
+                        />
+                        <Bike className="absolute inset-0 m-auto w-5 h-5 text-anil-blue" />
+                      </div>
+                      <p className="text-sm text-muted-foreground font-medium">
+                        Cargando...
+                      </p>
+                    </motion.div>
+                  </div>
+                }
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeView}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {renderView()}
+                  </motion.div>
+                </AnimatePresence>
+              </Suspense>
             </main>
           </div>
         )}
