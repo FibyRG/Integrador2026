@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Bike } from "lucide-react";
+import { ChevronDown, Bike, Sparkles } from "lucide-react";
 import { useTranslation } from "./LanguageToggle";
 
 export default function HeroSection() {
@@ -89,22 +89,34 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 70, damping: 16, mass: 0.8, delay: 0.65 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col items-center justify-center gap-6"
         >
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+            <Button
+              size="lg"
+              onClick={() => scrollTo("#reservar")}
+              className="bg-coral hover:bg-coral-dark text-white text-lg px-8 py-6 rounded-2xl shadow-lg shadow-coral/30 hover:shadow-coral/50 transition-all duration-300 hover:scale-105 active:scale-95 font-semibold cursor-pointer animate-pulse w-full sm:w-auto"
+            >
+              {t("hero.cta1")}
+            </Button>
+            <Button
+              size="lg"
+              variant="ghost"
+              onClick={() => scrollTo("#bicicletas")}
+              className="border-2 border-white/40 text-white bg-transparent hover:bg-white/10 hover:text-white text-lg px-8 py-6 rounded-2xl backdrop-blur-sm transition-all duration-300 hover:scale-105 active:scale-95 font-semibold cursor-pointer w-full sm:w-auto"
+            >
+              {t("hero.cta2")}
+            </Button>
+          </div>
+
           <Button
-            size="lg"
-            onClick={() => scrollTo("#reservar")}
-            className="bg-coral hover:bg-coral-dark text-white text-lg px-8 py-6 rounded-2xl shadow-lg shadow-coral/30 hover:shadow-coral/50 transition-all duration-300 hover:scale-105 active:scale-95 font-semibold cursor-pointer animate-pulse"
-          >
-            {t("hero.cta1")}
-          </Button>
-          <Button
-            size="lg"
+            size="sm"
             variant="ghost"
-            onClick={() => scrollTo("#bicicletas")}
-            className="border-2 border-white/40 text-white bg-transparent hover:bg-white/10 hover:text-white text-lg px-8 py-6 rounded-2xl backdrop-blur-sm transition-all duration-300 hover:scale-105 active:scale-95 font-semibold cursor-pointer"
+            onClick={() => scrollTo("#promociones")}
+            className="border border-white/20 text-white bg-white/5 hover:bg-white/10 px-5 py-4 rounded-xl flex items-center gap-2 backdrop-blur-sm transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer text-sm shadow-sm"
           >
-            {t("hero.cta2")}
+            <Sparkles className="w-4 h-4 text-colonial-yellow animate-pulse" />
+            <span>{t("hero.cta3")}</span>
           </Button>
         </motion.div>
       </motion.div>

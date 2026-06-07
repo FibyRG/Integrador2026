@@ -16,6 +16,7 @@ import ContactSection from "@/components/biciventura/ContactSection";
 import FloatingCTA from "@/components/biciventura/FloatingCTA";
 import Preloader from "@/components/biciventura/Preloader";
 import SmoothScroll from "@/components/biciventura/SmoothScroll";
+import DashboardSection from "@/components/biciventura/DashboardSection";
 
 // Dynamic imports to avoid SSR issues
 const ReservationWizard = dynamic(
@@ -59,6 +60,7 @@ export default function Home() {
           <TestimonialsSection />
           <AboutSection />
           <ReservationWizard preselectedBike={preselectedBike} />
+          <DashboardSection />
           <ContactSection />
         </main>
         <Footer />

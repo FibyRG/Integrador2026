@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Phone, Globe, Home, Bike, Calendar, MessageCircle, MoreHorizontal, Image as ImageIcon, Star, Mail } from "lucide-react";
+import { Menu, X, Phone, Globe, Home, Bike, Calendar, MessageCircle, MoreHorizontal, Image as ImageIcon, Star, Mail, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useTranslation, LanguageToggle } from "./LanguageToggle";
@@ -14,6 +14,7 @@ const navLinks = [
   { labelKey: "nav.testimonials", href: "#testimonios" },
   { labelKey: "nav.reserve", href: "#reservar" },
   { labelKey: "nav.contact", href: "#contacto" },
+  { labelKey: "nav.dashboard", href: "#dashboard" },
 ];
 
 export default function Navbar() {
@@ -24,7 +25,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("#inicio");
 
   useEffect(() => {
-    const sections = ["#inicio", "#bicicletas", "#galeria", "#testimonios", "#reservar", "#contacto"];
+    const sections = ["#inicio", "#bicicletas", "#galeria", "#testimonios", "#reservar", "#contacto", "#dashboard"];
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
 
@@ -344,6 +345,23 @@ export default function Navbar() {
                   <span className="text-sm font-bold text-white">{t("nav.contact")}</span>
                   <span className="text-[11px] text-white/50 mt-1">
                     {lang === "es" ? "Escribinos" : "Message us"}
+                  </span>
+                </button>
+
+                {/* Dashboard */}
+                <button
+                  onClick={() => {
+                    handleNavClick("#dashboard");
+                    setIsOpen(false);
+                  }}
+                  className="flex flex-col items-start p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all text-left group"
+                >
+                  <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 mb-3 group-hover:scale-110 transition-transform">
+                    <BarChart3 className="w-5 h-5" />
+                  </div>
+                  <span className="text-sm font-bold text-white">{t("nav.dashboard")}</span>
+                  <span className="text-[11px] text-white/50 mt-1">
+                    {lang === "es" ? "Métricas GA4" : "GA4 Metrics"}
                   </span>
                 </button>
 

@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Gift, Users, Bike, Sparkles, Tag } from "lucide-react";
 import { useTranslation } from "./LanguageToggle";
+import PromoCarousel from "@/components/ui/PromoCarousel";
 
 const promoCards = [
   {
@@ -80,9 +81,41 @@ export default function PromotionsSection() {
             {t("promotions.title.1")}{" "}
             <span className="text-colonial-yellow">{t("promotions.title.2")}</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-base sm:text-lg">
+          <p className="text-muted-foreground max-w-2xl mx-auto text-base sm:text-lg mb-8">
             {t("promotions.subtitle")}
           </p>
+        </motion.div>
+
+        {/* Promo Carousel */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-16 max-w-5xl mx-auto"
+        >
+          <PromoCarousel
+            slides={[
+              {
+                image: "carrusel 1.jpg",
+                title: lang === "es" ? "Explorá Granada a tu ritmo" : "Explore Granada at your own pace",
+                description: lang === "es" ? "Alquileres por hora o por día con mapas ilustrados gratis y asistencia local." : "Hourly or daily rentals with free illustrated maps and local assistance.",
+                ctaText: lang === "es" ? "Reservar Ahora" : "Book Now",
+                ctaLink: "/#reservar",
+                alt: "Bicicletas de alquiler BiciVentura en Granada"
+              },
+              {
+                image: "carrusel 2.jpg",
+                title: lang === "es" ? "Promoción Especial Fin de Semana" : "Special Weekend Promotion",
+                description: lang === "es" ? "Alquilá 2 días y llevate el 3er día totalmente gratis. ¡Disfrutá más de la ciudad colonial!" : "Rent for 2 days and get the 3rd day completely free. Enjoy more of the colonial city!",
+                ctaText: lang === "es" ? "Ver Catálogo" : "View Catalog",
+                ctaLink: "/#bicicletas",
+                alt: "Recorrido en bicicleta colonial por Granada"
+              }
+            ]}
+            autoPlay={true}
+            interval={5000}
+          />
         </motion.div>
 
         {/* Promotions Grid */}
