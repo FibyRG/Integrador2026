@@ -4,13 +4,14 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { Star, Quote } from "lucide-react";
+import { useTranslation } from "./LanguageToggle";
 
 interface Testimonial {
   id: number;
   name: string;
   origin: string;
-  date: string;
-  text: string;
+  dateKey: string;
+  textKey: string;
   rating: number;
   avatar: string;
 }
@@ -20,8 +21,8 @@ const testimonials: Testimonial[] = [
     id: 1,
     name: "María González",
     origin: "Buenos Aires, Argentina",
-    date: "Diciembre 2024",
-    text: "¡Increíble experiencia! Las bicis estaban en perfecto estado y el mapa que nos dieron fue super útil. Granada es aún más hermosa cuando la recorrés pedaleando. Volvería sin dudar.",
+    dateKey: "testimonials.t1.date",
+    textKey: "testimonials.t1.text",
     rating: 5,
     avatar: "/images/testimonials/person-1.jpg",
   },
@@ -29,8 +30,8 @@ const testimonials: Testimonial[] = [
     id: 2,
     name: "Thomas Müller",
     origin: "Berlín, Alemania",
-    date: "Noviembre 2024",
-    text: "The best way to explore Granada! The team was super friendly and the bikes are high quality. We rented the Mombacho MTB and had an amazing adventure on the volcano trails.",
+    dateKey: "testimonials.t2.date",
+    textKey: "testimonials.t2.text",
     rating: 5,
     avatar: "/images/testimonials/person-2.jpg",
   },
@@ -38,8 +39,8 @@ const testimonials: Testimonial[] = [
     id: 3,
     name: "Ana y Carlos",
     origin: "San José, Costa Rica",
-    date: "Enero 2025",
-    text: "Alquilamos el tandem para pasear por el malecón al atardecer. ¡Fue mágico! El servicio de entrega al hotel fue un gran plus. Muy recomendados para familias.",
+    dateKey: "testimonials.t3.date",
+    textKey: "testimonials.t3.text",
     rating: 5,
     avatar: "/images/testimonials/person-3.jpg",
   },
@@ -47,8 +48,8 @@ const testimonials: Testimonial[] = [
     id: 4,
     name: "Sarah Johnson",
     origin: "Portland, EE.UU.",
-    date: "Octubre 2024",
-    text: "Como ciclista experimentada, puedo decir que las bicis de BiciVentura están bien mantenidas. Los recorridos recomendados por la isleta fueron el punto máximo de nuestro viaje a Nicaragua.",
+    dateKey: "testimonials.t4.date",
+    textKey: "testimonials.t4.text",
     rating: 4,
     avatar: "/images/testimonials/person-1.jpg",
   },
@@ -56,8 +57,8 @@ const testimonials: Testimonial[] = [
     id: 5,
     name: "Lucía Fernández",
     origin: "Madrid, España",
-    date: "Febrero 2025",
-    text: "Reservamos online y todo fue súper fácil. La bici urban nos permitió conocer cada rincón de la ciudad colonial. Los precios son muy justos para la calidad del servicio.",
+    dateKey: "testimonials.t5.date",
+    textKey: "testimonials.t5.text",
     rating: 5,
     avatar: "/images/testimonials/person-2.jpg",
   },
@@ -65,8 +66,8 @@ const testimonials: Testimonial[] = [
     id: 6,
     name: "Jean-Pierre Dubois",
     origin: "París, Francia",
-    date: "Enero 2025",
-    text: "Magnifique! Granada is even more beautiful from a bicycle. The colonial architecture, the lake, the volcano... everything is perfect. BiciVentura made it easy and fun.",
+    dateKey: "testimonials.t6.date",
+    textKey: "testimonials.t6.text",
     rating: 5,
     avatar: "/images/testimonials/person-3.jpg",
   },
@@ -96,6 +97,7 @@ function TestimonialCard({
   testimonial: Testimonial;
   index: number;
 }) {
+  const { t } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-30px" });
 
@@ -109,7 +111,7 @@ function TestimonialCard({
     >
       <Quote className="w-8 h-8 text-colonial-yellow/30 mb-3" />
       <p className="text-sm sm:text-base text-anil-blue/80 leading-relaxed mb-4 line-clamp-4">
-        &ldquo;{testimonial.text}&rdquo;
+        &ldquo;{t(testimonial.textKey)}&rdquo;
       </p>
       <div className="flex items-center gap-3 pt-4 border-t border-anil-blue/5">
         <div className="relative w-11 h-11 rounded-full overflow-hidden flex-shrink-0">
@@ -130,7 +132,7 @@ function TestimonialCard({
         <div className="flex flex-col items-end gap-1">
           <StarRating rating={testimonial.rating} />
           <span className="text-[10px] text-muted-foreground">
-            {testimonial.date}
+            {t(testimonial.dateKey)}
           </span>
         </div>
       </div>
@@ -139,6 +141,7 @@ function TestimonialCard({
 }
 
 export default function TestimonialsSection() {
+  const { t } = useTranslation();
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
@@ -161,15 +164,14 @@ export default function TestimonialsSection() {
           className="text-center mb-10"
         >
           <span className="inline-block px-4 py-1.5 bg-jungle-green/10 text-jungle-green text-sm font-semibold rounded-full mb-4">
-            Testimonios
+            {t("testimonials.badge")}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-anil-blue mb-4">
-            Lo que dicen nuestros{" "}
-            <span className="text-colonial-yellow">aventureros</span>
+            {t("testimonials.title.1")}{" "}
+            <span className="text-colonial-yellow">{t("testimonials.title.2")}</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
-            Experiencias reales de viajeros que descubrieron Granada con
-            BiciVentura.
+            {t("testimonials.subtitle")}
           </p>
 
           {/* Rating summary */}
@@ -180,7 +182,7 @@ export default function TestimonialsSection() {
             <div>
               <StarRating rating={5} />
               <p className="text-xs text-muted-foreground">
-                Basado en {testimonials.length} reseñas
+                {t("testimonials.reviews")} {testimonials.length} {t("testimonials.reviews2")}
               </p>
             </div>
           </div>
@@ -205,13 +207,13 @@ export default function TestimonialsSection() {
           className="mt-10 text-center"
         >
           <p className="text-muted-foreground text-sm mb-3">
-            ¿Pedaleaste con nosotros? ¡Contanos tu experiencia!
+            {t("testimonials.leavereview")}
           </p>
           <a
             href="#contacto"
             className="inline-flex items-center gap-2 px-6 py-3 bg-white text-anil-blue rounded-2xl text-sm font-semibold hover:bg-colonial-yellow hover:text-anil-blue transition-all duration-200 shadow-sm hover:shadow-md border border-anil-blue/10"
           >
-            Dejar una reseña
+            {t("testimonials.cta")}
           </a>
         </motion.div>
       </div>

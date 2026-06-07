@@ -5,8 +5,10 @@ import { useRef } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Bike } from "lucide-react";
+import { useTranslation } from "./LanguageToggle";
 
 export default function HeroSection() {
+  const { t } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -32,12 +34,12 @@ export default function HeroSection() {
           src="/images/hero.jpg"
           alt="Granada Nicaragua - Bicicleta frente a la Catedral"
           fill
-          className="object-cover"
+          className="object-cover brightness-[0.25]"
           priority
           quality={90}
         />
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-anil-blue/60 via-anil-blue/40 to-anil-blue/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#070d19]/95 via-anil-blue/80 to-[#070d19]/98" />
       </motion.div>
 
       {/* Decorative floating elements */}
@@ -51,58 +53,58 @@ export default function HeroSection() {
         className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center"
       >
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ type: "spring", stiffness: 70, damping: 16, mass: 0.8, delay: 0.2 }}
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-colonial-yellow/20 backdrop-blur-sm rounded-full text-colonial-yellow text-sm font-medium mb-6 border border-colonial-yellow/30">
             <Bike className="w-4 h-4" />
-            Granada, Nicaragua
+            {t("hero.badge")}
           </span>
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ type: "spring", stiffness: 50, damping: 14, mass: 1, delay: 0.35 }}
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-6"
         >
-          Explorá Granada
+          {t("hero.title.1")}
           <br />
-          <span className="text-colonial-yellow">en bicicleta</span>
+          <span className="text-colonial-yellow font-serif italic">{t("hero.title.2")}</span>
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-lg sm:text-xl text-warm-white/90 max-w-2xl mx-auto mb-8 leading-relaxed"
+          transition={{ type: "spring", stiffness: 60, damping: 16, mass: 0.9, delay: 0.5 }}
+          className="text-lg sm:text-xl text-warm-white/90 max-w-2xl mx-auto mb-8 leading-relaxed font-sans"
         >
-          Alquiler fácil, recorridos inolvidables.
+          {t("hero.subtitle")}
           <br className="hidden sm:block" />
-          Reservá en minutos y descubrí la ciudad colonial sobre dos ruedas.
+          {t("hero.subtitle2")}
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
+          transition={{ type: "spring", stiffness: 70, damping: 16, mass: 0.8, delay: 0.65 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <Button
             size="lg"
             onClick={() => scrollTo("#reservar")}
-            className="bg-coral hover:bg-coral-dark text-white text-lg px-8 py-6 rounded-2xl shadow-lg shadow-coral/30 hover:shadow-coral/50 transition-all duration-300 hover:scale-105 font-semibold"
+            className="bg-coral hover:bg-coral-dark text-white text-lg px-8 py-6 rounded-2xl shadow-lg shadow-coral/30 hover:shadow-coral/50 transition-all duration-300 hover:scale-105 active:scale-95 font-semibold cursor-pointer animate-pulse"
           >
-            Reservar Ahora
+            {t("hero.cta1")}
           </Button>
           <Button
             size="lg"
-            variant="outline"
+            variant="ghost"
             onClick={() => scrollTo("#bicicletas")}
-            className="border-2 border-warm-white/40 text-warm-white hover:bg-warm-white/10 text-lg px-8 py-6 rounded-2xl backdrop-blur-sm transition-all duration-300 hover:scale-105 font-semibold"
+            className="border-2 border-white/40 text-white bg-transparent hover:bg-white/10 hover:text-white text-lg px-8 py-6 rounded-2xl backdrop-blur-sm transition-all duration-300 hover:scale-105 active:scale-95 font-semibold cursor-pointer"
           >
-            Ver Bicicletas
+            {t("hero.cta2")}
           </Button>
         </motion.div>
       </motion.div>
@@ -119,7 +121,7 @@ export default function HeroSection() {
           transition={{ repeat: Infinity, duration: 2 }}
           className="flex flex-col items-center gap-2 text-warm-white/60"
         >
-          <span className="text-xs font-medium">Descubrí más</span>
+          <span className="text-xs font-medium">{t("hero.scroll")}</span>
           <ChevronDown className="w-5 h-5" />
         </motion.div>
       </motion.div>

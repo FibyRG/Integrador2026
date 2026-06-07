@@ -1,19 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Bike, Navigation, Truck, MapPin, Phone, Mail, Instagram, Facebook, Heart, Shield } from "lucide-react";
+import { Bike, Navigation, Truck, MapPin, Phone, Mail, Instagram, Facebook, Heart } from "lucide-react";
 import Image from "next/image";
-
-interface FooterProps {
-  onOpenAdmin?: () => void;
-}
+import { useTranslation } from "./LanguageToggle";
 
 const quickLinks = [
-  { label: "Inicio", href: "#inicio" },
-  { label: "Bicicletas", href: "#bicicletas" },
-  { label: "Galería", href: "#galeria" },
-  { label: "Reservar", href: "#reservar" },
-  { label: "Contacto", href: "#contacto" },
+  { labelKey: "nav.home", href: "#inicio" },
+  { labelKey: "nav.bikes", href: "#bicicletas" },
+  { labelKey: "nav.gallery", href: "#galeria" },
+  { labelKey: "nav.reserve", href: "#reservar" },
+  { labelKey: "nav.contact", href: "#contacto" },
 ];
 
 const scrollTo = (href: string) => {
@@ -21,7 +18,9 @@ const scrollTo = (href: string) => {
   if (el) el.scrollIntoView({ behavior: "smooth" });
 };
 
-export default function Footer({ onOpenAdmin }: FooterProps) {
+export default function Footer() {
+  const { lang, t } = useTranslation();
+
   return (
     <footer className="bg-anil-blue text-warm-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
@@ -29,29 +28,32 @@ export default function Footer({ onOpenAdmin }: FooterProps) {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Image
-              src="/favicon.svg"
+              src="/logo-transparent.png"
               alt="BiciVentura"
-              width={48}
-              height={48}
-              className="mb-4"
+              width={72}
+              height={72}
+              className="mb-4 object-contain"
             />
             <h3 className="text-xl font-bold text-colonial-yellow mb-2">
               BiciVentura
             </h3>
             <p className="text-warm-white/70 text-sm leading-relaxed mb-4">
-              Pedaleá la aventura colonial. Alquiler de bicicletas en el corazón
-              de Granada, Nicaragua.
+              {t("footer.tagline")}
             </p>
             <div className="flex gap-3">
               <a
-                href="#"
+                href="https://www.instagram.com/bici_venturas?igsh=MXYwdmRyb2N3NWZjcA%3D%3D&utm_source=qr"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-xl bg-white/10 hover:bg-colonial-yellow hover:text-anil-blue flex items-center justify-center transition-all duration-200"
                 aria-label="Instagram"
               >
                 <Instagram className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href="https://www.facebook.com/share/192LVEA4LH/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-xl bg-white/10 hover:bg-colonial-yellow hover:text-anil-blue flex items-center justify-center transition-all duration-200"
                 aria-label="Facebook"
               >
@@ -63,7 +65,7 @@ export default function Footer({ onOpenAdmin }: FooterProps) {
           {/* Quick Links */}
           <div>
             <h4 className="text-base font-semibold text-colonial-yellow mb-4">
-              Enlaces
+              {t("footer.links")}
             </h4>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
@@ -72,7 +74,7 @@ export default function Footer({ onOpenAdmin }: FooterProps) {
                     onClick={() => scrollTo(link.href)}
                     className="text-warm-white/70 hover:text-colonial-yellow text-sm transition-colors duration-200"
                   >
-                    {link.label}
+                    {t(link.labelKey)}
                   </button>
                 </li>
               ))}
@@ -82,24 +84,24 @@ export default function Footer({ onOpenAdmin }: FooterProps) {
           {/* Services */}
           <div>
             <h4 className="text-base font-semibold text-colonial-yellow mb-4">
-              Servicios
+              {t("footer.services")}
             </h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-warm-white/70 text-sm">
                 <Bike className="w-4 h-4 text-jungle-green flex-shrink-0" />
-                Alquiler por hora y día
+                {t("footer.service1")}
               </li>
               <li className="flex items-center gap-2 text-warm-white/70 text-sm">
                 <Navigation className="w-4 h-4 text-jungle-green flex-shrink-0" />
-                Rutas recomendadas
+                {t("footer.service2")}
               </li>
               <li className="flex items-center gap-2 text-warm-white/70 text-sm">
                 <Truck className="w-4 h-4 text-jungle-green flex-shrink-0" />
-                Pick-up y drop-off flexible
+                {t("footer.service3")}
               </li>
               <li className="flex items-center gap-2 text-warm-white/70 text-sm">
                 <MapPin className="w-4 h-4 text-jungle-green flex-shrink-0" />
-                Tours guiados
+                {t("footer.service4")}
               </li>
             </ul>
           </div>
@@ -107,26 +109,40 @@ export default function Footer({ onOpenAdmin }: FooterProps) {
           {/* Contact */}
           <div>
             <h4 className="text-base font-semibold text-colonial-yellow mb-4">
-              Contacto
+              {t("footer.contact")}
             </h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-2 text-warm-white/70 text-sm">
                 <MapPin className="w-4 h-4 text-coral flex-shrink-0 mt-0.5" />
                 <span>
-                  Frente a la Catedral,
-                  <br />
-                  Calle La Calzada,
-                  <br />
-                  Granada, Nicaragua
+                  {lang === "es" ? (
+                    <>
+                      Frente a la Catedral,
+                      <br />
+                      Calle La Calzada,
+                      <br />
+                      Granada, Nicaragua
+                    </>
+                  ) : (
+                    <>
+                      In front of the Cathedral,
+                      <br />
+                      La Calzada Street,
+                      <br />
+                      Granada, Nicaragua
+                    </>
+                  )}
                 </span>
               </li>
               <li>
                 <a
-                  href="tel:+50512345678"
+                  href="https://wa.me/50584081989?text=Hola%20BiciVentura,%20me%20gustar%C3%ADa%20obtener%20informaci%C3%B3n%20sobre%20el%20alquiler%20de%20bicicletas."
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-2 text-warm-white/70 hover:text-colonial-yellow text-sm transition-colors"
                 >
-                  <Phone className="w-4 h-4" />
-                  +505 1234-5678
+                  <Phone className="w-4 h-4 text-colonial-yellow" />
+                  +505 8408 1989
                 </a>
               </li>
               <li>
@@ -146,24 +162,19 @@ export default function Footer({ onOpenAdmin }: FooterProps) {
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <p className="text-warm-white/50 text-xs">
-              &copy; {new Date().getFullYear()} BiciVentura. Todos los derechos
-              reservados.
+              &copy; {new Date().getFullYear()} BiciVentura. {t("footer.all_rights")}
             </p>
-            {onOpenAdmin && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onOpenAdmin();
-                }}
-                className="text-warm-white/30 hover:text-warm-white/60 transition-colors"
-                aria-label="Admin"
-              >
-                <Shield className="w-3.5 h-3.5" />
-              </button>
-            )}
           </div>
           <p className="text-warm-white/50 text-xs inline-flex items-center gap-1">
-            Hecho con <Heart className="w-3 h-3 text-coral fill-coral" /> en Granada, Nicaragua
+            {lang === "es" ? (
+              <>
+                Hecho con <Heart className="w-3 h-3 text-coral fill-coral mx-0.5 animate-pulse" /> en Granada, Nicaragua
+              </>
+            ) : (
+              <>
+                Made with <Heart className="w-3 h-3 text-coral fill-coral mx-0.5 animate-pulse" /> in Granada, Nicaragua
+              </>
+            )}
           </p>
         </div>
       </div>

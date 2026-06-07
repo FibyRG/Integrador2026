@@ -3,28 +3,26 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Bike, Map, Truck } from "lucide-react";
+import { Banknote, Map, Truck } from "lucide-react";
+import { useTranslation } from "./LanguageToggle";
 
 const features = [
   {
-    icon: Bike,
-    title: "Bicicletas en excelente estado",
-    description:
-      "Nuestra flota se mantiene impecable. Cada bici recibe mantenimiento preventivo semanal para tu seguridad y comodidad.",
+    icon: Banknote,
+    titleKey: "features.f1.title",
+    descriptionKey: "features.f1.desc",
     color: "colonial-yellow",
   },
   {
     icon: Map,
-    title: "Rutas recomendadas con mapas",
-    description:
-      "Te proporcionamos mapas ilustrados de las mejores rutas por la ciudad colonial, el malecón del lago y las isletas.",
+    titleKey: "features.f2.title",
+    descriptionKey: "features.f2.desc",
     color: "jungle-green",
   },
   {
     icon: Truck,
-    title: "Pick-up y drop-off flexible",
-    description:
-      "Recogé tu bici en nuestro punto central frente a la Catedral o te la llevamos a tu hotel. ¡Tú elegís!",
+    titleKey: "features.f3.title",
+    descriptionKey: "features.f3.desc",
     color: "coral",
   },
 ];
@@ -36,6 +34,7 @@ function FeatureCard({
   feature: (typeof features)[0];
   index: number;
 }) {
+  const { t } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
@@ -74,16 +73,17 @@ function FeatureCard({
         <Icon className={`w-7 h-7 ${colors.icon}`} />
       </div>
       <h3 className="text-lg sm:text-xl font-bold text-anil-blue mb-3">
-        {feature.title}
+        {t(feature.titleKey)}
       </h3>
       <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
-        {feature.description}
+        {t(feature.descriptionKey)}
       </p>
     </motion.div>
   );
 }
 
 export default function FeaturesSection() {
+  const { t } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -98,21 +98,20 @@ export default function FeaturesSection() {
           className="text-center mb-12 lg:mb-16"
         >
           <span className="inline-block px-4 py-1.5 bg-jungle-green/10 text-jungle-green text-sm font-semibold rounded-full mb-4">
-            ¿Por qué elegirnos?
+            {t("features.badge")}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-anil-blue mb-4">
-            ¿Por qué{" "}
-            <span className="text-colonial-yellow">BiciVentura</span>?
+            {t("features.title.1")}{" "}
+            <span className="text-colonial-yellow">{t("features.title.2")}</span>?
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-base sm:text-lg">
-            Más que un alquiler, una experiencia completa para descubrir Granada
-            a tu ritmo.
+            {t("features.subtitle")}
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {features.map((feature, index) => (
-            <FeatureCard key={feature.title} feature={feature} index={index} />
+            <FeatureCard key={feature.titleKey} feature={feature} index={index} />
           ))}
         </div>
       </div>

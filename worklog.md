@@ -77,3 +77,18 @@ Stage Summary:
 - Two roles: Admin (full access: dashboard, POS, tickets, invoices, inventory) and Empleado (limited: POS, tickets)
 - Login credentials: admin="admin", empleado="empleado"
 - Admin accessible via floating "Admin" button (bottom-left on desktop, tab on mobile bottom bar) and Ctrl+Shift+A shortcut
+
+---
+Task ID: 3
+Agent: Main Agent (Antigravity)
+Task: Integrate Google Analytics (gtag.js) tracking tag in RootLayout
+
+Work Log:
+- Added Next.js `Script` component to optimize loading of Google Analytics scripts
+- Integrated Google Tag ID G-03QFFS5JEG dynamically using environment variable `NEXT_PUBLIC_GA_ID` with hardcoded fallback in `src/app/layout.tsx`
+- Appended `NEXT_PUBLIC_GA_ID=G-03QFFS5JEG` to `.env` file
+
+Stage Summary:
+- Google Analytics is integrated cleanly at the root layout level, ensuring automatic tracking on all pages and client-side transitions
+- Highly maintainable and configurable through environment variables
+

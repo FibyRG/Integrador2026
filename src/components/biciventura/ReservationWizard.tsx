@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
+import { useTranslation } from "./LanguageToggle";
 import {
   Select,
   SelectContent,
@@ -50,7 +51,7 @@ interface CartItem {
 
 interface AccessoryItem {
   id: string;
-  name: string;
+  nameKey: string;
   price: number;
   icon: LucideIcon;
   qty: number;
@@ -61,16 +62,24 @@ const timeSlots = [
   "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM",
 ];
 
-const nationalities = [
-  "Nicaragüense", "Costarricense", "Estadounidense", "Canadiense",
-  "Español", "Argentino", "Mexicano", "Colombiano", "Alemán", "Francés",
-  "Británico", "Italiano", "Holandés", "Brasileño", "Otro",
-];
+const nationalities = {
+  es: [
+    "Nicaragüense", "Costarricense", "Estadounidense", "Canadiense",
+    "Español", "Argentino", "Mexicano", "Colombiano", "Alemán", "Francés",
+    "Británico", "Italiano", "Holandés", "Brasileño", "Otro",
+  ],
+  en: [
+    "Nicaraguan", "Costa Rican", "American", "Canadian",
+    "Spanish", "Argentinian", "Mexican", "Colombian", "German", "French",
+    "British", "Italian", "Dutch", "Brazilian", "Other",
+  ]
+};
 
 const steps = [
-  { icon: Bike, label: "Elegí tus ruedas" },
-  { icon: CalendarDays, label: "Fecha y hora" },
-  { icon: UserCheck, label: "Tus datos" },
+  { icon: Bike, labelKey: "reserve.step1" },
+  { icon: ShoppingBag, labelKey: "reserve.accessories" },
+  { icon: CalendarDays, labelKey: "reserve.step2" },
+  { icon: UserCheck, labelKey: "reserve.step3" },
 ];
 
 export default function ReservationWizard({
@@ -83,6 +92,7 @@ export default function ReservationWizard({
     image: string;
   };
 }) {
+  const { lang, t } = useTranslation();
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
   const [step, setStep] = useState(0);
@@ -110,22 +120,23 @@ export default function ReservationWizard({
   const [pickupTime, setPickupTime] = useState("");
   const [returnTime, setReturnTime] = useState("");
 
-  // Step 3 state
+  // Step 3 state (aligned with SQL columns)
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    nationality: "",
-    notes: "",
+    nombres: "",
+    apellidos: "",
+    codigo: "",
+    genero: "",
+    nacionalidad: "",
+    telefono: "",
   });
 
-  const allAccessories: { id: string; name: string; price: number; icon: LucideIcon }[] = [
-    { id: "casco", name: "Casco de seguridad", price: 2, icon: HardHat },
-    { id: "candado", name: "Candado U-Lock", price: 1, icon: Lock },
-    { id: "silla", name: "Silla para niños", price: 5, icon: Baby },
-    { id: "picnic", name: "Kit de picnic", price: 8, icon: UtensilsCrossed },
-    { id: "botella", name: "Botella de agua", price: 1, icon: Droplets },
-    { id: "farol", name: "Farol extra", price: 1, icon: Flashlight },
+  const allAccessories: { id: string; nameKey: string; price: number; icon: LucideIcon }[] = [
+    { id: "casco", nameKey: "accessories.helmet", price: 40, icon: HardHat },
+    { id: "candado", nameKey: "accessories.lock", price: 20, icon: Lock },
+    { id: "silla", nameKey: "accessories.child_seat", price: 100, icon: Baby },
+    { id: "picnic", nameKey: "accessories.picnic_kit", price: 160, icon: UtensilsCrossed },
+    { id: "botella", nameKey: "accessories.water_bottle", price: 20, icon: Droplets },
+    { id: "farol", nameKey: "accessories.extra_light", price: 20, icon: Flashlight },
   ];
 
   const addAccessory = (acc: (typeof allAccessories)[0]) => {
@@ -166,7 +177,13 @@ export default function ReservationWizard({
 
   const canProceedStep1 = cart.length > 0;
   const canProceedStep2 = pickupDate && returnDate && pickupTime && returnTime;
-  const canSubmit = formData.name && formData.email && formData.phone;
+  const canSubmit =
+    formData.nombres.trim() !== "" &&
+    formData.apellidos.trim() !== "" &&
+    formData.codigo.trim() !== "" &&
+    formData.genero.trim() !== "" &&
+    formData.nacionalidad.trim() !== "" &&
+    formData.telefono.trim() !== "";
 
   const handleSubmit = () => {
     setCompleted(true);
@@ -176,6 +193,8 @@ export default function ReservationWizard({
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
+
+  const nationalityList = nationalities[lang] || nationalities.es;
 
   if (completed) {
     return (
@@ -192,22 +211,22 @@ export default function ReservationWizard({
           <div className="flex items-center justify-center gap-2 mb-4">
             <PartyPopper className="w-6 h-6 text-colonial-yellow" />
             <h2 className="text-3xl font-extrabold text-anil-blue">
-              Reserva recibida
+              {t("reserve.confirmed")}
             </h2>
           </div>
           <p className="text-muted-foreground mb-2">
-            Gracias, <span className="font-semibold text-anil-blue">{formData.name}</span>! Hemos recibido tu solicitud de reserva.
+            {lang === "es" ? "¡Gracias" : "Thank you"}, <span className="font-semibold text-anil-blue">{formData.nombres} {formData.apellidos}</span>! {t("reserve.thanks")}
           </p>
           <p className="text-muted-foreground mb-6">
-            Te enviaremos un email de confirmación a{" "}
-            <span className="font-semibold text-anil-blue">{formData.email}</span>{" "}
-            con todos los detalles y un código QR para tu recogida.
+            {lang === "es" ? "Tu reserva ha sido registrada con el código:" : "Your booking has been registered with code:"}{" "}
+            <span className="font-semibold text-anil-blue">{formData.codigo}</span>{" "}
+            {lang === "es" ? "para el momento de tu recogida." : "for your pickup."}
           </p>
 
           <div className="bg-white rounded-3xl p-6 shadow-sm mb-8 text-left">
             <h3 className="font-bold text-anil-blue mb-3 flex items-center gap-2">
               <ShoppingBag className="w-5 h-5 text-colonial-yellow" />
-              Resumen de tu reserva
+              {t("reserve.summary")}
             </h3>
             {cart.map((item) => (
               <div key={item.bikeId} className="flex justify-between py-2 text-sm">
@@ -215,27 +234,27 @@ export default function ReservationWizard({
                   {item.name} × {item.qty}
                 </span>
                 <span className="font-semibold text-anil-blue">
-                  ${item.price * item.qty * days}
+                  C$ {item.price * item.qty * days}
                 </span>
               </div>
             ))}
             {accessories.map((item) => (
               <div key={item.id} className="flex justify-between py-2 text-sm">
                 <span className="text-muted-foreground">
-                  {item.name} × {item.qty}
+                  {t(item.nameKey)} × {item.qty}
                 </span>
                 <span className="font-semibold text-anil-blue">
-                  ${item.price * item.qty * days}
+                  C$ {item.price * item.qty * days}
                 </span>
               </div>
             ))}
             <div className="border-t border-anil-blue/10 pt-3 mt-3">
               <div className="flex justify-between">
-                <span className="font-bold text-anil-blue">Total estimado</span>
-                <span className="text-xl font-extrabold text-coral">${total}</span>
+                <span className="font-bold text-anil-blue">{t("reserve.total")}</span>
+                <span className="text-xl font-extrabold text-coral">C$ {total}</span>
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                Pago en persona al momento de la recogida
+                {t("reserve.payment")}
               </p>
             </div>
           </div>
@@ -243,7 +262,7 @@ export default function ReservationWizard({
           <div className="bg-colonial-yellow/10 rounded-2xl p-4 mb-8">
             <p className="text-sm text-anil-blue flex items-center justify-center gap-2">
               <MapPin className="w-4 h-4 text-coral" />
-              <span className="font-medium">Punto de encuentro:</span> Frente a la Catedral, Calle La Calzada
+              <span className="font-medium">{t("reserve.meeting")}</span> {t("reserve.meeting_addr")}
             </p>
           </div>
 
@@ -257,11 +276,11 @@ export default function ReservationWizard({
               setReturnDate(undefined);
               setPickupTime("");
               setReturnTime("");
-              setFormData({ name: "", email: "", phone: "", nationality: "", notes: "" });
+              setFormData({ nombres: "", apellidos: "", codigo: "", genero: "", nacionalidad: "", telefono: "" });
             }}
             className="bg-anil-blue hover:bg-anil-blue-dark text-white rounded-2xl px-8"
           >
-            Hacer otra reserva
+            {t("reserve.another")}
           </Button>
         </div>
       </section>
@@ -280,14 +299,14 @@ export default function ReservationWizard({
           className="text-center mb-10"
         >
           <span className="inline-block px-4 py-1.5 bg-coral/20 text-coral text-sm font-semibold rounded-full mb-4">
-            Reservar
+            {t("reserve.badge")}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4">
-            Reservá tu{" "}
-            <span className="text-colonial-yellow">aventura</span>
+            {t("reserve.title.1")}{" "}
+            <span className="text-colonial-yellow">{t("reserve.title.2")}</span>
           </h2>
           <p className="text-warm-white/70 max-w-xl mx-auto">
-            Completá los 3 pasos y recibí tu confirmación por email.
+            {t("reserve.subtitle")}
           </p>
         </motion.div>
 
@@ -324,7 +343,7 @@ export default function ReservationWizard({
                         : "text-warm-white/40"
                     }`}
                   >
-                    {s.label}
+                    {t(s.labelKey)}
                   </span>
                 </div>
                 {i < steps.length - 1 && (
@@ -353,16 +372,16 @@ export default function ReservationWizard({
               >
                 <h3 className="text-xl font-bold text-anil-blue mb-6 flex items-center gap-2">
                   <Bike className="w-5 h-5 text-colonial-yellow" />
-                  Paso 1: Elegí tus ruedas
+                  {t("reserve.step1")}
                 </h3>
 
                 {/* Available bikes */}
                 <div className="space-y-3 mb-6">
                   {[
-                    { id: "granada-cruiser", name: "Granada Cruiser", price: 25, image: "/images/bikes/granada-cruiser.jpg" },
-                    { id: "mombacho-mtb", name: "Mombacho MTB", price: 40, image: "/images/bikes/mombacho-mtb.jpg" },
-                    { id: "colonial-urban", name: "Colonial Urban", price: 20, image: "/images/bikes/colonial-urban.jpg" },
-                    { id: "tandem-amigos", name: "Tandem Amigos", price: 50, image: "/images/bikes/tandem-amigos.jpg" },
+                    { id: "granada-cruiser", name: "Granada Cruiser", price: 500, image: "/images/bikes/granada-cruiser.jpg" },
+                    { id: "mombacho-mtb", name: "Mombacho MTB", price: 800, image: "/images/bikes/mombacho-mtb.jpg" },
+                    { id: "colonial-urban", name: "Colonial Urban", price: 400, image: "/images/bikes/colonial-urban.jpg" },
+                    { id: "tandem-amigos", name: "Tandem Amigos", price: 1000, image: "/images/bikes/tandem-amigos.jpg" },
                   ].map((bike) => {
                     const inCart = cart.find((c) => c.bikeId === bike.id);
                     return (
@@ -406,7 +425,7 @@ export default function ReservationWizard({
                             {bike.name}
                           </p>
                           <p className="text-coral font-bold text-sm">
-                            ${bike.price}/día
+                            C$ {bike.price}/{t("reserve.day")}
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
@@ -453,9 +472,9 @@ export default function ReservationWizard({
                             onClick={(e) => {
                               e.stopPropagation();
                               if (inCart) {
-                                setCart((prev) =>
-                                  prev.filter((c) => c.bikeId !== bike.id)
-                                );
+                                  setCart((prev) =>
+                                    prev.filter((c) => c.bikeId !== bike.id)
+                                  );
                               } else {
                                 setCart((prev) => [
                                   ...prev,
@@ -487,11 +506,39 @@ export default function ReservationWizard({
                   })}
                 </div>
 
-                {/* Accessories */}
-                <h4 className="text-sm font-bold text-anil-blue mb-3 flex items-center gap-2">
-                  <ShoppingBag className="w-4 h-4 text-jungle-green" />
-                  Complementos
-                </h4>
+                {/* Cart summary */}
+                {cart.length > 0 && (
+                  <div className="bg-warm-white rounded-2xl p-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-semibold text-anil-blue">
+                        {t("reserve.cart")}
+                      </span>
+                      <span className="text-lg font-extrabold text-coral">
+                        C$ {bikesTotal}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {cart.reduce((acc, c) => acc + c.qty, 0)} {lang === "es" ? "bici(s)" : "bike(s)"} · {t("reserve.perday")}
+                    </p>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* Step 2: Choose accessories */}
+            {step === 1 && (
+              <motion.div
+                key="step_acc"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                className="p-6 sm:p-8"
+              >
+                <h3 className="text-xl font-bold text-anil-blue mb-6 flex items-center gap-2">
+                  <ShoppingBag className="w-5 h-5 text-colonial-yellow" />
+                  {t("reserve.accessories")}
+                </h3>
+
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-6">
                   {allAccessories.map((acc) => {
                     const AccIcon = acc.icon;
@@ -513,10 +560,10 @@ export default function ReservationWizard({
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-medium text-anil-blue truncate">
-                            {acc.name}
+                            {t(acc.nameKey)}
                           </p>
                           <p className="text-xs text-coral font-bold">
-                            ${acc.price}/día
+                            C$ {acc.price}/{t("reserve.day")}
                             {inCart && <span> ×{inCart.qty}</span>}
                           </p>
                         </div>
@@ -526,27 +573,25 @@ export default function ReservationWizard({
                 </div>
 
                 {/* Cart summary */}
-                {cart.length > 0 && (
-                  <div className="bg-warm-white rounded-2xl p-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-semibold text-anil-blue">
-                        Carrito
-                      </span>
-                      <span className="text-lg font-extrabold text-coral">
-                        ${total}
-                      </span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      {cart.reduce((acc, c) => acc + c.qty, 0)} bici(s) +
-                      {accessories.reduce((acc, a) => acc + a.qty, 0)} complemento(s) · Precio por 1 día
-                    </p>
+                <div className="bg-warm-white rounded-2xl p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-semibold text-anil-blue">
+                      {t("reserve.cart")}
+                    </span>
+                    <span className="text-lg font-extrabold text-coral">
+                      C$ {total}
+                    </span>
                   </div>
-                )}
+                  <p className="text-xs text-muted-foreground">
+                    {cart.reduce((acc, c) => acc + c.qty, 0)} {lang === "es" ? "bici(s)" : "bike(s)"} +{" "}
+                    {accessories.reduce((acc, a) => acc + a.qty, 0)} {t("reserve.accessories").toLowerCase()} · {t("reserve.perday")}
+                  </p>
+                </div>
               </motion.div>
             )}
 
-            {/* Step 2: Date and time */}
-            {step === 1 && (
+            {/* Step 3: Date and time */}
+            {step === 2 && (
               <motion.div
                 key="step2"
                 initial={{ opacity: 0, x: 50 }}
@@ -556,7 +601,7 @@ export default function ReservationWizard({
               >
                 <h3 className="text-xl font-bold text-anil-blue mb-6 flex items-center gap-2">
                   <CalendarDays className="w-5 h-5 text-colonial-yellow" />
-                  Paso 2: Fecha y hora
+                  {t("reserve.step2")}
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
@@ -564,7 +609,7 @@ export default function ReservationWizard({
                   <div>
                     <Label className="text-sm font-semibold text-anil-blue mb-2 flex items-center gap-2">
                       <CalendarIcon className="w-4 h-4 text-colonial-yellow" />
-                      Fecha de recogida
+                      {t("reserve.pickup")}
                     </Label>
                     <Calendar
                       mode="single"
@@ -575,12 +620,12 @@ export default function ReservationWizard({
                     />
                     <div className="mt-3">
                       <Label className="text-sm font-medium text-muted-foreground mb-1.5 block">
-                        Hora de recogida
+                        {t("reserve.pickupTime")}
                       </Label>
                       <Select value={pickupTime} onValueChange={setPickupTime}>
                         <SelectTrigger className="rounded-xl">
                           <Clock className="w-4 h-4 text-muted-foreground mr-2" />
-                          <SelectValue placeholder="Seleccionar hora" />
+                          <SelectValue placeholder={t("reserve.select_time")} />
                         </SelectTrigger>
                         <SelectContent>
                           {timeSlots.map((t) => (
@@ -597,7 +642,7 @@ export default function ReservationWizard({
                   <div>
                     <Label className="text-sm font-semibold text-anil-blue mb-2 flex items-center gap-2">
                       <CalendarIcon className="w-4 h-4 text-colonial-yellow" />
-                      Fecha de devolución
+                      {t("reserve.return")}
                     </Label>
                     <Calendar
                       mode="single"
@@ -610,12 +655,12 @@ export default function ReservationWizard({
                     />
                     <div className="mt-3">
                       <Label className="text-sm font-medium text-muted-foreground mb-1.5 block">
-                        Hora de devolución
+                        {t("reserve.returnTime")}
                       </Label>
                       <Select value={returnTime} onValueChange={setReturnTime}>
                         <SelectTrigger className="rounded-xl">
                           <Clock className="w-4 h-4 text-muted-foreground mr-2" />
-                          <SelectValue placeholder="Seleccionar hora" />
+                          <SelectValue placeholder={t("reserve.select_time")} />
                         </SelectTrigger>
                         <SelectContent>
                           {timeSlots.map((t) => (
@@ -634,20 +679,20 @@ export default function ReservationWizard({
                   <div className="bg-warm-white rounded-2xl p-4">
                     <div className="grid grid-cols-3 gap-4 text-center">
                       <div>
-                        <p className="text-xs text-muted-foreground">Duración</p>
+                        <p className="text-xs text-muted-foreground">{t("reserve.duration")}</p>
                         <p className="text-lg font-bold text-anil-blue">
-                          {days} {days === 1 ? "día" : "días"}
+                          {days} {days === 1 ? t("reserve.day") : t("reserve.days")}
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground">Bicicletas</p>
+                        <p className="text-xs text-muted-foreground">{t("reserve.bikes")}</p>
                         <p className="text-lg font-bold text-anil-blue">
                           {cart.reduce((a, c) => a + c.qty, 0)}
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground">Total</p>
-                        <p className="text-lg font-bold text-coral">${total}</p>
+                        <p className="text-xs text-muted-foreground">{t("reserve.total")}</p>
+                        <p className="text-lg font-bold text-coral">C$ {total}</p>
                       </div>
                     </div>
                   </div>
@@ -655,8 +700,8 @@ export default function ReservationWizard({
               </motion.div>
             )}
 
-            {/* Step 3: User data */}
-            {step === 2 && (
+            {/* Step 4: User data */}
+            {step === 3 && (
               <motion.div
                 key="step3"
                 initial={{ opacity: 0, x: 50 }}
@@ -666,96 +711,136 @@ export default function ReservationWizard({
               >
                 <h3 className="text-xl font-bold text-anil-blue mb-6 flex items-center gap-2">
                   <UserCheck className="w-5 h-5 text-colonial-yellow" />
-                  Paso 3: Tus datos
+                  {t("reserve.step3")}
                 </h3>
 
                 <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="name" className="text-sm font-medium">
-                      Nombre completo *
-                    </Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
-                      }
-                      placeholder="Tu nombre"
-                      className="mt-1.5 rounded-xl"
-                    />
-                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="email" className="text-sm font-medium">
-                        Email *
+                      <Label htmlFor="nombres" className="text-sm font-medium">
+                        {t("reserve.nombres")}
                       </Label>
                       <Input
-                        id="email"
-                        type="email"
-                        value={formData.email}
+                        id="nombres"
+                        maxLength={100}
+                        value={formData.nombres}
                         onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
+                          setFormData({ ...formData, nombres: e.target.value })
                         }
-                        placeholder="tu@email.com"
+                        placeholder={t("reserve.ph_nombres")}
                         className="mt-1.5 rounded-xl"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="phone" className="text-sm font-medium">
-                        Teléfono / WhatsApp *
+                      <Label htmlFor="apellidos" className="text-sm font-medium">
+                        {t("reserve.apellidos")}
                       </Label>
                       <Input
-                        id="phone"
-                        type="tel"
-                        value={formData.phone}
+                        id="apellidos"
+                        maxLength={100}
+                        value={formData.apellidos}
                         onChange={(e) =>
-                          setFormData({ ...formData, phone: e.target.value })
+                          setFormData({ ...formData, apellidos: e.target.value })
                         }
-                        placeholder="+505 1234 5678"
+                        placeholder={t("reserve.ph_apellidos")}
                         className="mt-1.5 rounded-xl"
                       />
                     </div>
                   </div>
-                  <div>
-                    <Label className="text-sm font-medium">Nacionalidad</Label>
-                    <Select
-                      value={formData.nationality}
-                      onValueChange={(val) =>
-                        setFormData({ ...formData, nationality: val })
-                      }
-                    >
-                      <SelectTrigger className="mt-1.5 rounded-xl">
-                        <SelectValue placeholder="Seleccionar" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {nationalities.map((n) => (
-                          <SelectItem key={n} value={n}>
-                            {n}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="codigo" className="text-sm font-medium">
+                        {t("reserve.codigo")}
+                      </Label>
+                      <Input
+                        id="codigo"
+                        maxLength={50}
+                        value={formData.codigo}
+                        onChange={(e) =>
+                          setFormData({ ...formData, codigo: e.target.value })
+                        }
+                        placeholder={t("reserve.ph_codigo")}
+                        className="mt-1.5 rounded-xl"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="telefono" className="text-sm font-medium">
+                        {t("reserve.telefono")}
+                      </Label>
+                      <Input
+                        id="telefono"
+                        type="number"
+                        pattern="[0-9]*"
+                        value={formData.telefono}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === "" || /^\d+$/.test(val)) {
+                            setFormData({ ...formData, telefono: val });
+                          }
+                        }}
+                        placeholder={t("reserve.ph_telefono")}
+                        className="mt-1.5 rounded-xl"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="notes" className="text-sm font-medium">
-                      Notas especiales
-                    </Label>
-                    <Textarea
-                      id="notes"
-                      value={formData.notes}
-                      onChange={(e) =>
-                        setFormData({ ...formData, notes: e.target.value })
-                      }
-                      placeholder="¿Algo que debamos saber? (alergias, necesidades especiales, preferencias de ruta...)"
-                      className="mt-1.5 rounded-xl min-h-[80px]"
-                    />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-sm font-medium">
+                        {t("reserve.genero")}
+                      </Label>
+                      <Select
+                        value={formData.genero}
+                        onValueChange={(val) =>
+                          setFormData({ ...formData, genero: val })
+                        }
+                      >
+                        <SelectTrigger className="mt-1.5 rounded-xl">
+                          <SelectValue placeholder={t("reserve.select_gender")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Masculino">
+                            {lang === "es" ? "Masculino" : "Male"}
+                          </SelectItem>
+                          <SelectItem value="Femenino">
+                            {lang === "es" ? "Femenino" : "Female"}
+                          </SelectItem>
+                          <SelectItem value="Otro">
+                            {lang === "es" ? "Otro" : "Other"}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium">
+                        {t("reserve.nacionalidad")}
+                      </Label>
+                      <Select
+                        value={formData.nacionalidad}
+                        onValueChange={(val) =>
+                          setFormData({ ...formData, nacionalidad: val })
+                        }
+                      >
+                        <SelectTrigger className="mt-1.5 rounded-xl">
+                          <SelectValue placeholder={t("reserve.select_nationality")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {nationalityList.map((n) => (
+                            <SelectItem key={n} value={n}>
+                              {n}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </div>
 
                 {/* Order summary */}
                 <div className="bg-warm-white rounded-2xl p-4 mt-6">
                   <h4 className="font-bold text-anil-blue text-sm mb-3">
-                    Resumen del pedido
+                    {t("reserve.summary")}
                   </h4>
                   {cart.map((item) => (
                     <div
@@ -763,10 +848,10 @@ export default function ReservationWizard({
                       className="flex justify-between py-1.5 text-sm"
                     >
                       <span className="text-muted-foreground">
-                        {item.name} × {item.qty} × {days}d
+                        {item.name} × {item.qty} × {days} {days === 1 ? t("reserve.day") : t("reserve.days")}
                       </span>
                       <span className="font-medium">
-                        ${item.price * item.qty * days}
+                        C$ {item.price * item.qty * days}
                       </span>
                     </div>
                   ))}
@@ -776,23 +861,23 @@ export default function ReservationWizard({
                       className="flex justify-between py-1.5 text-sm"
                     >
                       <span className="text-muted-foreground">
-                        {item.name} × {item.qty} × {days}d
+                        {t(item.nameKey)} × {item.qty} × {days} {days === 1 ? t("reserve.day") : t("reserve.days")}
                       </span>
                       <span className="font-medium">
-                        ${item.price * item.qty * days}
+                        C$ {item.price * item.qty * days}
                       </span>
                     </div>
                   ))}
                   <div className="border-t border-anil-blue/10 pt-3 mt-2">
                     <div className="flex justify-between items-center">
-                      <span className="font-bold text-anil-blue">Total</span>
+                      <span className="font-bold text-anil-blue">{t("reserve.total")}</span>
                       <span className="text-2xl font-extrabold text-coral">
-                        ${total}
+                        C$ {total}
                       </span>
                     </div>
                     <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1.5">
                       <Lightbulb className="w-3.5 h-3.5" />
-                      Pago en persona al momento de la recogida
+                      {t("reserve.payment")}
                     </p>
                   </div>
                 </div>
@@ -809,18 +894,18 @@ export default function ReservationWizard({
               disabled={step === 0}
             >
               <ChevronLeft className="w-4 h-4 mr-1" />
-              Anterior
+              {t("reserve.previous")}
             </Button>
 
-            {step < 2 ? (
+            {step < 3 ? (
               <Button
                 onClick={() => setStep(step + 1)}
                 disabled={
-                  step === 0 ? !canProceedStep1 : !canProceedStep2
+                  step === 0 ? !canProceedStep1 : step === 1 ? false : !canProceedStep2
                 }
                 className="bg-anil-blue hover:bg-anil-blue-dark text-white rounded-xl px-6"
               >
-                Siguiente
+                {t("reserve.next")}
                 <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             ) : (
@@ -829,7 +914,7 @@ export default function ReservationWizard({
                 disabled={!canSubmit}
                 className="bg-coral hover:bg-coral-dark text-white rounded-xl px-8 font-semibold"
               >
-                Confirmar reserva
+                {t("reserve.confirm")}
                 <Check className="w-4 h-4 ml-1" />
               </Button>
             )}

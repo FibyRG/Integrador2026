@@ -5,8 +5,10 @@ import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Bike } from "lucide-react";
+import { useTranslation } from "./LanguageToggle";
 
 export default function CTABanner() {
+  const { t } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
@@ -41,11 +43,10 @@ export default function CTABanner() {
             <Bike className="w-8 h-8 text-colonial-yellow" />
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight">
-            ¿Listo para <span className="text-colonial-yellow">rodar</span>?
+            {t("cta.title.1")} <span className="text-colonial-yellow">{t("cta.title.2")}</span>?
           </h2>
           <p className="text-warm-white/80 text-lg sm:text-xl mb-8 max-w-xl mx-auto">
-            No esperes más. Reservá tu bicicleta y empezá a explorar la perla
-            colonial de Centroamérica.
+            {t("cta.subtitle")}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button
@@ -53,15 +54,15 @@ export default function CTABanner() {
               onClick={() => scrollTo("#reservar")}
               className="bg-coral hover:bg-coral-dark text-white text-lg px-10 py-6 rounded-2xl shadow-lg shadow-coral/30 hover:shadow-coral/50 transition-all duration-300 hover:scale-105 font-semibold"
             >
-              Reservá ahora
+              {t("cta.cta1")}
             </Button>
             <Button
               size="lg"
-              variant="outline"
+              variant="ghost"
               onClick={() => scrollTo("#contacto")}
-              className="border-2 border-warm-white/30 text-warm-white hover:bg-warm-white/10 text-lg px-10 py-6 rounded-2xl backdrop-blur-sm transition-all duration-300 font-semibold"
+              className="border-2 border-white/40 text-white bg-transparent hover:bg-white/10 hover:text-white text-lg px-10 py-6 rounded-2xl backdrop-blur-sm transition-all duration-300 hover:scale-105 active:scale-95 font-semibold cursor-pointer"
             >
-              Hablá con nosotros
+              {t("cta.cta2")}
             </Button>
           </div>
         </motion.div>

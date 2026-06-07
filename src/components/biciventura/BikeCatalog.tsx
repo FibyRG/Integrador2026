@@ -6,14 +6,15 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Star, ChevronLeft, ChevronRight, HardHat, Lock, Baby, UtensilsCrossed, Droplets, Flashlight, type LucideIcon } from "lucide-react";
+import { useTranslation } from "./LanguageToggle";
 
-interface Bike {
+export interface Bike {
   id: string;
   name: string;
   type: "urbana" | "montaña" | "cruiser" | "tandem";
   image: string;
-  description: string;
-  features: string[];
+  descriptionKey: string;
+  featuresKeys: string[];
   pricePerHour: number;
   pricePerDay: number;
   available: boolean;
@@ -25,11 +26,10 @@ const bikes: Bike[] = [
     name: "Granada Cruiser",
     type: "cruiser",
     image: "/images/bikes/granada-cruiser.jpg",
-    description:
-      "Bicicleta estilo cruiser perfecta para pasear por las calles coloniales. Asiento cómodo, canasta incluida y diseño vintage que combina con la ciudad.",
-    features: ["Canasta", "Asiento acolchado", "Cambios 3 velocidades", "Faro LED"],
-    pricePerHour: 5,
-    pricePerDay: 25,
+    descriptionKey: "bikes.granada-cruiser.desc",
+    featuresKeys: ["bikes.granada-cruiser.f1", "bikes.granada-cruiser.f2", "bikes.granada-cruiser.f3", "bikes.granada-cruiser.f4"],
+    pricePerHour: 100,
+    pricePerDay: 500,
     available: true,
   },
   {
@@ -37,11 +37,10 @@ const bikes: Bike[] = [
     name: "Mombacho MTB",
     type: "montaña",
     image: "/images/bikes/mombacho-mtb.jpg",
-    description:
-      "Mountain bike robusta para aventuras en los senderos del volcán Mombacho o rutas fuera del asfalto. Suspensión delantera y frenos de disco.",
-    features: ["Suspensión delantera", "Frenos de disco", "21 velocidades", "Llanta antipinchaduras"],
-    pricePerHour: 8,
-    pricePerDay: 40,
+    descriptionKey: "bikes.mombacho-mtb.desc",
+    featuresKeys: ["bikes.mombacho-mtb.f1", "bikes.mombacho-mtb.f2", "bikes.mombacho-mtb.f3", "bikes.mombacho-mtb.f4"],
+    pricePerHour: 160,
+    pricePerDay: 800,
     available: true,
   },
   {
@@ -49,11 +48,10 @@ const bikes: Bike[] = [
     name: "Colonial Urban",
     type: "urbana",
     image: "/images/bikes/colonial-urban.jpg",
-    description:
-      "Bicicleta urbana clásica en tono colonial amarillo. Ideal para recorrer el centro histórico y tomar fotos. Liviana y fácil de manejar.",
-    features: ["Canasta tejida", "Portaequipajes", "7 velocidades", "Cascó incluido"],
-    pricePerHour: 4,
-    pricePerDay: 20,
+    descriptionKey: "bikes.colonial-urban.desc",
+    featuresKeys: ["bikes.colonial-urban.f1", "bikes.colonial-urban.f2", "bikes.colonial-urban.f3", "bikes.colonial-urban.f4"],
+    pricePerHour: 80,
+    pricePerDay: 400,
     available: true,
   },
   {
@@ -61,40 +59,40 @@ const bikes: Bike[] = [
     name: "Tandem Amigos",
     type: "tandem",
     image: "/images/bikes/tandem-amigos.jpg",
-    description:
-      "Bicicleta tandem para compartir la aventura. Perfecta para parejas o amigos que quieren pedalear juntos por el malecón del lago.",
-    features: ["Doble asiento", "Frenos independientes", "7 velocidades", "Soporte para celular"],
-    pricePerHour: 10,
-    pricePerDay: 50,
+    descriptionKey: "bikes.tandem-amigos.desc",
+    featuresKeys: ["bikes.tandem-amigos.f1", "bikes.tandem-amigos.f2", "bikes.tandem-amigos.f3", "bikes.tandem-amigos.f4"],
+    pricePerHour: 200,
+    pricePerDay: 1000,
     available: false,
   },
 ];
 
 interface Accessory {
   id: string;
-  name: string;
+  nameKey: string;
   price: number;
   icon: LucideIcon;
 }
 
 const accessories: Accessory[] = [
-  { id: "casco", name: "Casco de seguridad", price: 2, icon: HardHat },
-  { id: "candado", name: "Candado U-Lock", price: 1, icon: Lock },
-  { id: "silla", name: "Silla para niños", price: 5, icon: Baby },
-  { id: "picnic", name: "Kit de picnic", price: 8, icon: UtensilsCrossed },
-  { id: "botella", name: "Botella de agua", price: 1, icon: Droplets },
-  { id: "farol", name: "Farol extra", price: 1, icon: Flashlight },
+  { id: "casco", nameKey: "accessories.helmet", price: 40, icon: HardHat },
+  { id: "candado", nameKey: "accessories.lock", price: 20, icon: Lock },
+  { id: "silla", nameKey: "accessories.child_seat", price: 100, icon: Baby },
+  { id: "picnic", nameKey: "accessories.picnic_kit", price: 160, icon: UtensilsCrossed },
+  { id: "botella", nameKey: "accessories.water_bottle", price: 20, icon: Droplets },
+  { id: "farol", nameKey: "accessories.extra_light", price: 20, icon: Flashlight },
 ];
 
 const typeFilters = [
-  { value: "todos", label: "Todas" },
-  { value: "urbana", label: "Urbanas" },
-  { value: "montaña", label: "Montaña" },
-  { value: "cruiser", label: "Cruiser" },
-  { value: "tandem", label: "Tandem" },
+  { value: "todos", labelKey: "bikes.type_plural.todos" },
+  { value: "urbana", labelKey: "bikes.type_plural.urbana" },
+  { value: "montaña", labelKey: "bikes.type_plural.montaña" },
+  { value: "cruiser", labelKey: "bikes.type_plural.cruiser" },
+  { value: "tandem", labelKey: "bikes.type_plural.tandem" },
 ];
 
 function BikeCard({ bike, onSelect }: { bike: Bike; onSelect: (bike: Bike) => void }) {
+  const { t } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-30px" });
 
@@ -117,11 +115,11 @@ function BikeCard({ bike, onSelect }: { bike: Bike; onSelect: (bike: Bike) => vo
         />
         <div className="absolute top-3 left-3 flex gap-2">
           <Badge className="bg-anil-blue/90 text-white backdrop-blur-sm border-none">
-            {bike.type.charAt(0).toUpperCase() + bike.type.slice(1)}
+            {t("bikes.type." + bike.type)}
           </Badge>
           {!bike.available && (
             <Badge className="bg-coral/90 text-white backdrop-blur-sm border-none">
-              Agotada
+              {t("bikes.unavailable")}
             </Badge>
           )}
         </div>
@@ -131,17 +129,17 @@ function BikeCard({ bike, onSelect }: { bike: Bike; onSelect: (bike: Bike) => vo
       <div className="p-5 sm:p-6">
         <h3 className="text-xl font-bold text-anil-blue mb-2">{bike.name}</h3>
         <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-2">
-          {bike.description}
+          {t(bike.descriptionKey)}
         </p>
 
         {/* Features */}
         <div className="flex flex-wrap gap-1.5 mb-4">
-          {bike.features.map((f) => (
+          {bike.featuresKeys.map((fk) => (
             <span
-              key={f}
+              key={fk}
               className="px-2.5 py-1 bg-jungle-green/8 text-jungle-green text-xs font-medium rounded-lg"
             >
-              {f}
+              {t(fk)}
             </span>
           ))}
         </div>
@@ -151,19 +149,19 @@ function BikeCard({ bike, onSelect }: { bike: Bike; onSelect: (bike: Bike) => vo
           <div>
             <div className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Por hora</span>
+              <span className="text-xs text-muted-foreground">{t("bikes.perhour")}</span>
             </div>
             <span className="text-2xl font-extrabold text-coral">
-              ${bike.pricePerHour}
+              C${bike.pricePerHour}
             </span>
           </div>
           <div>
             <div className="flex items-center gap-1">
               <Star className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Por día</span>
+              <span className="text-xs text-muted-foreground">{t("bikes.perday")}</span>
             </div>
             <span className="text-2xl font-extrabold text-coral">
-              ${bike.pricePerDay}
+              C${bike.pricePerDay}
             </span>
           </div>
         </div>
@@ -178,7 +176,7 @@ function BikeCard({ bike, onSelect }: { bike: Bike; onSelect: (bike: Bike) => vo
               : "bg-gray-200 text-gray-500 cursor-not-allowed"
           }`}
         >
-          {bike.available ? "Reservar esta bici" : "No disponible"}
+          {bike.available ? t("bikes.reserve") : t("bikes.unavailable")}
         </Button>
       </div>
     </motion.div>
@@ -186,6 +184,7 @@ function BikeCard({ bike, onSelect }: { bike: Bike; onSelect: (bike: Bike) => vo
 }
 
 export default function BikeCatalog({ onReserve }: { onReserve: (bike?: Bike) => void }) {
+  const { t } = useTranslation();
   const [filter, setFilter] = useState("todos");
   const carouselRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -216,15 +215,14 @@ export default function BikeCatalog({ onReserve }: { onReserve: (bike?: Bike) =>
           className="text-center mb-10"
         >
           <span className="inline-block px-4 py-1.5 bg-coral/10 text-coral text-sm font-semibold rounded-full mb-4">
-            Nuestra flota
+            {t("bikes.badge")}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-anil-blue mb-4">
-            Elegí tu{" "}
-            <span className="text-colonial-yellow">compañera de ruta</span>
+            {t("bikes.title.1")}{" "}
+            <span className="text-colonial-yellow">{t("bikes.title.2")}</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Bicicletas para cada estilo de aventura. Todas incluyen mapa gratuito
-            de Granada.
+            {t("bikes.subtitle")}
           </p>
         </motion.div>
 
@@ -240,7 +238,7 @@ export default function BikeCatalog({ onReserve }: { onReserve: (bike?: Bike) =>
                   : "bg-white text-anil-blue hover:bg-anil-blue/10 border border-anil-blue/10"
               }`}
             >
-              {f.label}
+              {t(f.labelKey)}
             </button>
           ))}
         </div>
@@ -260,7 +258,7 @@ export default function BikeCatalog({ onReserve }: { onReserve: (bike?: Bike) =>
             viewport={{ once: true }}
             className="text-2xl font-bold text-anil-blue mb-6 text-center"
           >
-            Complementos disponibles
+            {t("bikes.accessories")}
           </motion.h3>
 
           <div className="relative">
@@ -295,10 +293,10 @@ export default function BikeCatalog({ onReserve }: { onReserve: (bike?: Bike) =>
                       <AccIcon className="w-5 h-5 text-colonial-yellow" />
                     </div>
                     <h4 className="text-sm font-semibold text-anil-blue mb-1">
-                      {acc.name}
+                      {t(acc.nameKey)}
                     </h4>
                     <span className="text-coral font-bold">
-                      +${acc.price}/día
+                      +C${acc.price}/{t("reserve.day")}
                     </span>
                   </div>
                 );

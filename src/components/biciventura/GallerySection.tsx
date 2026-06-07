@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { X, ZoomIn } from "lucide-react";
+import { useTranslation } from "./LanguageToggle";
 
 interface GalleryImage {
   src: string;
@@ -49,13 +50,14 @@ const galleryImages: GalleryImage[] = [
 ];
 
 const categoryFilters = [
-  { value: "todas", label: "Todas" },
-  { value: "clientes", label: "Clientes felices" },
-  { value: "paisajes", label: "Paisajes" },
-  { value: "detalles", label: "Detalles" },
+  { value: "todas", labelKey: "gallery.all" },
+  { value: "clientes", labelKey: "gallery.happy" },
+  { value: "paisajes", labelKey: "gallery.landscapes" },
+  { value: "detalles", labelKey: "gallery.details" },
 ];
 
 export default function GallerySection() {
+  const { t } = useTranslation();
   const [filter, setFilter] = useState("todas");
   const [lightbox, setLightbox] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -78,15 +80,14 @@ export default function GallerySection() {
           className="text-center mb-10"
         >
           <span className="inline-block px-4 py-1.5 bg-colonial-yellow/10 text-colonial-yellow text-sm font-semibold rounded-full mb-4">
-            Galería
+            {t("gallery.badge")}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-anil-blue mb-4">
-            Granada sobre{" "}
-            <span className="text-colonial-yellow">ruedas</span>
+            {t("gallery.title.1")}{" "}
+            <span className="text-colonial-yellow">{t("gallery.title.2")}</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Momentos capturados de aventureros explorando la perla colonial de
-            Nicaragua.
+            {t("gallery.subtitle")}
           </p>
         </motion.div>
 
@@ -102,7 +103,7 @@ export default function GallerySection() {
                   : "bg-white text-anil-blue hover:bg-colonial-yellow/10 border border-anil-blue/10"
               }`}
             >
-              {f.label}
+              {t(f.labelKey)}
             </button>
           ))}
         </div>
